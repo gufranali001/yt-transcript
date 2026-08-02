@@ -41,8 +41,8 @@ export default function UrlInput({ setTranscript }: UrlInputProps) {
       setLoading(true);
 
       const response = await fetch(
-        `http://127.0.0.1:8000/transcript?video_id=${encodeURIComponent(videoId)}`
-      );
+  `https://yt-transcript-production-71d5.up.railway.app/transcript?video_id=${videoId}`
+);
 
       const data = await response.json();
 
