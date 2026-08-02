@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from youtube_transcript_api import YouTubeTranscriptApi
+import traceback
 
 app = FastAPI(title="YT Tube Transcript API")
 
@@ -73,7 +74,16 @@ def transcript(video_id: str):
         }
 
     except Exception as e:
+        error_trace = traceback.format_exc()
+
+        print("=" * 80)
+        print("TRANSCRIPT ERROR")
+        print(error_trace)
+        print("=" * 80)
+
         return {
             "success": False,
-            "error": str(e)
+            "error": str(e),
+            "exception_type": type(e).__name__,
+            "traceback": error_trace
         }
