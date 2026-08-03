@@ -145,10 +145,7 @@ def translate_test():
 
     try:
 
-        API_URL = (
-            "https://router.huggingface.co/"
-            "hf-inference/models/facebook/nllb-200-distilled-600M"
-        )
+        API_URL = "https://api-inference.huggingface.co/models/facebook/nllb-200-distilled-600M"
 
         headers = {
             "Authorization": f"Bearer {HF_API_KEY}",
