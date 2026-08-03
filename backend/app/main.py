@@ -1,4 +1,5 @@
 import os
+import html
 import requests
 
 from fastapi import FastAPI
@@ -34,7 +35,8 @@ def transcript(video_id: str):
 
         querystring = {
             "url": f"https://www.youtube.com/watch?v={video_id}",
-            "flat_text": "false"
+            "flat_text": "false",
+            "lang": "en"
         }
 
         headers = {
@@ -61,26 +63,48 @@ def transcript(video_id: str):
         if not data.get("success", False):
             return {
                 "success": False,
-                "error": data.get("error", "Transcript not available")
+                "error": data.get(
+                    "error",
+                    "Transcript not available"
+                )
             }
 
         segments = data.get("transcript", [])
 
-        plain_text = ""
+        if not isinstance(segments, list):
+            segments = []
 
-        if isinstance(segments, list):
-            plain_text = " ".join(
-                item.get("text", "")
-                for item in segments
-            )
-        else:
-            plain_text = str(segments)
+        # Clean HTML entities in every segment
+        cleaned_segments = []
+
+        for item in segments:
+
+            cleaned_segments.append({
+                **item,
+                "text": html.unescape(
+                    item.get("text", "")
+                )
+            })
+
+        # Plain transcript
+        plain_text = " ".join(
+            item["text"]
+            for item in cleaned_segments
+        )
+
+        # Detect language
+        language = (
+            data.get("language")
+            or data.get("lang")
+            or data.get("detected_language")
+            or "English"
+        )
 
         return {
             "success": True,
-            "language": data.get("language", "Unknown"),
+            "language": language,
             "transcript": plain_text,
-            "segments": segments
+            "segments": cleaned_segments
         }
 
     except Exception as e:
