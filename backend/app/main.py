@@ -3,7 +3,6 @@ import requests
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 
 app = FastAPI(title="YT Tube Transcript API")
 
@@ -16,8 +15,6 @@ app.add_middleware(
 )
 
 RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
-HF_API_KEY = os.getenv("HF_API_KEY")
-
 RAPIDAPI_HOST = "youtube-transcript3.p.rapidapi.com"
 
 
@@ -69,123 +66,21 @@ def transcript(video_id: str):
 
         segments = data.get("transcript", [])
 
-plain_text = ""
+        plain_text = ""
 
-if isinstance(segments, list):
-    plain_text = " ".join(
-        item.get("text", "")
-        for item in segments
-    )
-
-return {
-    "success": True,
-    "language": data.get("language", "Unknown"),
-    "transcript": plain_text,
-    "segments": segments
-}
-
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e)
-        }
-
-
-# ===========================================
-# Translation
-# ===========================================
-
-class TranslateRequest(BaseModel):
-    text: str
-    target: str
-
-
-@app.post("/translate")
-def translate(req: TranslateRequest):
-
-    try:
-
-        API_URL = (
-            "https://router.huggingface.co/"
-            "hf-inference/models/facebook/nllb-200-distilled-600M"
-        )
-
-        headers = {
-            "Authorization": f"Bearer {HF_API_KEY}",
-            "Content-Type": "application/json"
-        }
-
-        payload = {
-            "inputs": req.text,
-            "parameters": {
-                "target_lang": req.target
-            }
-        }
-
-        response = requests.post(
-            API_URL,
-            headers=headers,
-            json=payload,
-            timeout=60
-        )
-
-        try:
-            result = response.json()
-        except:
-            result = response.text
+        if isinstance(segments, list):
+            plain_text = " ".join(
+                item.get("text", "")
+                for item in segments
+            )
+        else:
+            plain_text = str(segments)
 
         return {
-            "success": response.status_code == 200,
-            "status_code": response.status_code,
-            "response": result
-        }
-
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e)
-        }
-
-
-# ===========================================
-# Translation Test
-# ===========================================
-
-@app.get("/translate-test")
-def translate_test():
-
-    try:
-
-        API_URL = "https://api-inference.huggingface.co/models/facebook/nllb-200-distilled-600M"
-
-        headers = {
-            "Authorization": f"Bearer {HF_API_KEY}",
-            "Content-Type": "application/json"
-        }
-
-        payload = {
-            "inputs": "Hello my friend. How are you?",
-            "parameters": {
-                "target_lang": "hin_Deva"
-            }
-        }
-
-        response = requests.post(
-            API_URL,
-            headers=headers,
-            json=payload,
-            timeout=60
-        )
-
-        try:
-            result = response.json()
-        except:
-            result = response.text
-
-        return {
-            "success": response.status_code == 200,
-            "status_code": response.status_code,
-            "response": result
+            "success": True,
+            "language": data.get("language", "Unknown"),
+            "transcript": plain_text,
+            "segments": segments
         }
 
     except Exception as e:
