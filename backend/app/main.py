@@ -80,9 +80,9 @@ def transcript(video_id: str):
         }
 
 
-# ===========================
+# ===========================================
 # Translation
-# ===========================
+# ===========================================
 
 class TranslateRequest(BaseModel):
     text: str
@@ -100,7 +100,8 @@ def translate(req: TranslateRequest):
         )
 
         headers = {
-            "Authorization": f"Bearer {HF_API_KEY}"
+            "Authorization": f"Bearer {HF_API_KEY}",
+            "Content-Type": "application/json"
         }
 
         payload = {
@@ -117,7 +118,67 @@ def translate(req: TranslateRequest):
             timeout=60
         )
 
-        return response.json()
+        try:
+            result = response.json()
+        except:
+            result = response.text
+
+        return {
+            "success": response.status_code == 200,
+            "status_code": response.status_code,
+            "response": result
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+
+# ===========================================
+# Translation Test
+# ===========================================
+
+@app.get("/translate-test")
+def translate_test():
+
+    try:
+
+        API_URL = (
+            "https://router.huggingface.co/"
+            "hf-inference/models/facebook/nllb-200-distilled-600M"
+        )
+
+        headers = {
+            "Authorization": f"Bearer {HF_API_KEY}",
+            "Content-Type": "application/json"
+        }
+
+        payload = {
+            "inputs": "Hello my friend. How are you?",
+            "parameters": {
+                "target_lang": "hin_Deva"
+            }
+        }
+
+        response = requests.post(
+            API_URL,
+            headers=headers,
+            json=payload,
+            timeout=60
+        )
+
+        try:
+            result = response.json()
+        except:
+            result = response.text
+
+        return {
+            "success": response.status_code == 200,
+            "status_code": response.status_code,
+            "response": result
+        }
 
     except Exception as e:
         return {
