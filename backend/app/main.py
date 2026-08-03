@@ -3,6 +3,7 @@ import requests
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 app = FastAPI(title="YT Tube Transcript API")
 
@@ -15,6 +16,8 @@ app.add_middleware(
 )
 
 RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
+HF_API_KEY = os.getenv("HF_API_KEY")
+
 RAPIDAPI_HOST = "youtube-transcript3.p.rapidapi.com"
 
 
@@ -66,8 +69,55 @@ def transcript(video_id: str):
 
         return {
             "success": True,
+            "language": data.get("language", "Unknown"),
             "transcript": data.get("transcript", "")
         }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+
+# ===========================
+# Translation
+# ===========================
+
+class TranslateRequest(BaseModel):
+    text: str
+    target: str
+
+
+@app.post("/translate")
+def translate(req: TranslateRequest):
+
+    try:
+
+        API_URL = (
+            "https://router.huggingface.co/"
+            "hf-inference/models/facebook/nllb-200-distilled-600M"
+        )
+
+        headers = {
+            "Authorization": f"Bearer {HF_API_KEY}"
+        }
+
+        payload = {
+            "inputs": req.text,
+            "parameters": {
+                "target_lang": req.target
+            }
+        }
+
+        response = requests.post(
+            API_URL,
+            headers=headers,
+            json=payload,
+            timeout=60
+        )
+
+        return response.json()
 
     except Exception as e:
         return {
