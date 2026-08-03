@@ -11,9 +11,17 @@ import Features from "../components/Features";
 import FAQ from "../components/FAQ";
 import Footer from "../components/Footer";
 
-export default function Home() {
+type Segment = {
+  text: string;
+  offset: string;
+  duration: string;
+  lang: string;
+};
 
+export default function Home() {
   const [transcript, setTranscript] = useState("");
+  const [segments, setSegments] = useState<Segment[]>([]);
+  const [language, setLanguage] = useState("");
 
   return (
     <>
@@ -23,21 +31,26 @@ export default function Home() {
         <Hero />
 
         <section className="max-w-7xl mx-auto px-5 py-10">
-
-          <UrlInput setTranscript={setTranscript} />
+          <UrlInput
+            setTranscript={setTranscript}
+            setSegments={setSegments}
+            setLanguage={setLanguage}
+          />
 
           <div className="mt-6">
             <LanguageSelect />
           </div>
 
           <div className="mt-8">
-            <TranscriptBox transcript={transcript} />
+            <TranscriptBox
+              transcript={transcript}
+              segments={segments}
+              language={language}
+            />
           </div>
-
         </section>
 
         <Features />
-
         <FAQ />
       </main>
 

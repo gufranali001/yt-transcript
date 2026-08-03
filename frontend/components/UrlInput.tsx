@@ -2,11 +2,24 @@
 
 import { useState } from "react";
 
-type UrlInputProps = {
-  setTranscript: (text: string) => void;
+type Segment = {
+  text: string;
+  offset: string;
+  duration: string;
+  lang: string;
 };
 
-export default function UrlInput({ setTranscript }: UrlInputProps) {
+type UrlInputProps = {
+  setTranscript: (text: string) => void;
+  setSegments: (segments: Segment[]) => void;
+  setLanguage: (language: string) => void;
+};
+
+export default function UrlInput({
+  setTranscript,
+  setSegments,
+  setLanguage,
+}: UrlInputProps) {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -54,6 +67,8 @@ export default function UrlInput({ setTranscript }: UrlInputProps) {
 
       if (data.success) {
         setTranscript(data.transcript);
+        setSegments(data.segments || []);
+        setLanguage(data.language || "Unknown");
       } else {
         alert(data.error || "Transcript not found.");
       }
