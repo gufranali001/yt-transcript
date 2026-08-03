@@ -33,9 +33,9 @@ def transcript(video_id: str):
         url = "https://youtube-transcript3.p.rapidapi.com/api/transcript-with-url"
 
         querystring = {
-    "url": f"https://www.youtube.com/watch?v={video_id}",
-    "flat_text": "true"
-}
+            "url": f"https://www.youtube.com/watch?v={video_id}",
+            "flat_text": "true"
+        }
 
         headers = {
             "x-rapidapi-key": RAPIDAPI_KEY,
@@ -59,15 +59,15 @@ def transcript(video_id: str):
             }
 
         if not data.get("success", False):
-    return {
-        "success": False,
-        "error": data.get("error", "Transcript not available")
-    }
+            return {
+                "success": False,
+                "error": data.get("error", "Transcript not available")
+            }
 
-return {
-    "success": True,
-    "transcript": data.get("transcript", "")
-}
+        return {
+            "success": True,
+            "transcript": data.get("transcript", "")
+        }
 
     except Exception as e:
         return {
