@@ -37,7 +37,7 @@ def transcript(video_id: str):
 
         querystring = {
             "url": f"https://www.youtube.com/watch?v={video_id}",
-            "flat_text": "true"
+            "flat_text": "false"
         }
 
         headers = {
@@ -67,11 +67,22 @@ def transcript(video_id: str):
                 "error": data.get("error", "Transcript not available")
             }
 
-        return {
-            "success": True,
-            "language": data.get("language", "Unknown"),
-            "transcript": data.get("transcript", "")
-        }
+        segments = data.get("transcript", [])
+
+plain_text = ""
+
+if isinstance(segments, list):
+    plain_text = " ".join(
+        item.get("text", "")
+        for item in segments
+    )
+
+return {
+    "success": True,
+    "language": data.get("language", "Unknown"),
+    "transcript": plain_text,
+    "segments": segments
+}
 
     except Exception as e:
         return {
