@@ -1,7 +1,8 @@
+import os
+import requests
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from youtube_transcript_api import YouTubeTranscriptApi
-import traceback
 
 app = FastAPI(title="YT Tube Transcript API")
 
@@ -12,6 +13,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
+RAPIDAPI_HOST = "youtube-transcript3.p.rapidapi.com"
 
 
 @app.get("/")
@@ -26,64 +30,42 @@ def home():
 def transcript(video_id: str):
 
     try:
-        api = YouTubeTranscriptApi()
+        url = "https://youtube-transcript3.p.rapidapi.com/api/transcript-with-url"
 
-        transcript_list = api.list(video_id)
+        querystring = {
+    "url": f"https://www.youtube.com/watch?v={video_id}",
+    "flat_text": "true"
+}
 
-        transcript = None
+        headers = {
+            "x-rapidapi-key": RAPIDAPI_KEY,
+            "x-rapidapi-host": RAPIDAPI_HOST,
+            "Content-Type": "application/json"
+        }
 
-        # 1. English manual
-        try:
-            transcript = transcript_list.find_transcript(["en"])
-        except:
-            pass
+        response = requests.get(
+            url,
+            headers=headers,
+            params=querystring,
+            timeout=30
+        )
 
-        # 2. English auto
-        if transcript is None:
-            try:
-                transcript = transcript_list.find_generated_transcript(["en"])
-            except:
-                pass
+        data = response.json()
 
-        # 3. Hindi manual
-        if transcript is None:
-            try:
-                transcript = transcript_list.find_transcript(["hi"])
-            except:
-                pass
-
-        # 4. Hindi auto
-        if transcript is None:
-            try:
-                transcript = transcript_list.find_generated_transcript(["hi"])
-            except:
-                pass
-
-        # 5. First available transcript
-        if transcript is None:
-            transcript = next(iter(transcript_list))
-
-        data = transcript.fetch()
-
-        text = " ".join(item.text for item in data)
+        if response.status_code != 200:
+            return {
+                "success": False,
+                "error": data
+            }
 
         return {
             "success": True,
-            "language": transcript.language,
-            "transcript": text
+            "transcript": data.get("transcript", ""),
+            "raw": data
         }
 
     except Exception as e:
-        error_trace = traceback.format_exc()
-
-        print("=" * 80)
-        print("TRANSCRIPT ERROR")
-        print(error_trace)
-        print("=" * 80)
-
         return {
             "success": False,
-            "error": str(e),
-            "exception_type": type(e).__name__,
-            "traceback": error_trace
+            "error": str(e)
         }

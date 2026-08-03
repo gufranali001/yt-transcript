@@ -10,71 +10,66 @@ export default function UrlInput({ setTranscript }: UrlInputProps) {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function getTranscript() {
-    if (!url.trim()) {
-      alert("Please paste a YouTube URL");
+  function getVideoId(link: string) {
+    try {
+      const u = new URL(link);
+
+      if (u.hostname.includes("youtu.be")) {
+        return u.pathname.slice(1);
+      }
+
+      return u.searchParams.get("v");
+    } catch {
+      return null;
+    }
+  }
+
+  async function generateTranscript() {
+    const videoId = getVideoId(url);
+
+    if (!videoId) {
+      alert("Please enter a valid YouTube URL.");
       return;
     }
 
-    let videoId = "";
+    setLoading(true);
 
     try {
-      const parsed = new URL(url);
+      const res = await fetch(
+        `https://yt-transcript-production-71d5.up.railway.app/transcript?video_id=${videoId}`
+      );
 
-      if (parsed.hostname.includes("youtu.be")) {
-        videoId = parsed.pathname.replace("/", "");
-      } else if (parsed.pathname.startsWith("/shorts/")) {
-        videoId = parsed.pathname.split("/shorts/")[1];
-      } else if (parsed.pathname.startsWith("/live/")) {
-        videoId = parsed.pathname.split("/live/")[1];
-      } else {
-        videoId = parsed.searchParams.get("v") || "";
-      }
-
-      videoId = videoId.split("?")[0].split("&")[0].trim();
-
-      if (!videoId) {
-        alert("Invalid YouTube URL");
-        return;
-      }
-
-      setLoading(true);
-
-      const response = await fetch(
-  `https://yt-transcript-production-71d5.up.railway.app/transcript?video_id=${videoId}`
-);
-
-      const data = await response.json();
+      const data = await res.json();
 
       if (data.success) {
         setTranscript(data.transcript);
       } else {
-        alert(data.error || "Transcript not found");
+        alert(data.error || "Transcript not found.");
       }
-    } catch (error) {
-      console.error(error);
-      alert("Backend Connection Failed");
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="flex flex-col md:flex-row gap-5">
+    <div className="flex flex-col gap-4">
       <input
         type="text"
-        placeholder="Paste YouTube Video URL..."
+        placeholder="Paste YouTube URL here..."
         value={url}
         onChange={(e) => setUrl(e.target.value)}
-        className="flex-1 rounded-xl bg-slate-900 border border-slate-700 px-6 py-5 text-white outline-none"
+        className="w-full rounded-xl border border-slate-700 bg-slate-900 text-white px-4 py-3 outline-none"
       />
 
       <button
-        onClick={getTranscript}
+        onClick={generateTranscript}
         disabled={loading}
-        className="bg-red-600 hover:bg-red-700 text-white rounded-xl px-8 py-5 font-bold disabled:opacity-50"
+        className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl disabled:opacity-50"
       >
-        {loading ? "Loading..." : "Get Transcript"}
+        {loading ? "Generating..." : "Generate Transcript"}
       </button>
     </div>
   );
