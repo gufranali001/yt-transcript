@@ -58,11 +58,16 @@ def transcript(video_id: str):
                 "error": data
             }
 
-        return {
-            "success": True,
-            "transcript": data.get("transcript", ""),
-            "raw": data
-        }
+        if not data.get("success", False):
+    return {
+        "success": False,
+        "error": data.get("error", "Transcript not available")
+    }
+
+return {
+    "success": True,
+    "transcript": data.get("transcript", "")
+}
 
     except Exception as e:
         return {
