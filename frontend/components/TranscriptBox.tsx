@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 type Segment = {
   text: string;
   offset: string;
@@ -18,11 +20,18 @@ export default function TranscriptBox({
   segments,
   language,
 }: Props) {
+  const [copied, setCopied] = useState(false);
+
   function copyTranscript() {
     if (!transcript) return;
 
     navigator.clipboard.writeText(transcript);
-    alert("Copied ✅");
+
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
   }
 
   function downloadTXT() {
@@ -98,29 +107,29 @@ export default function TranscriptBox({
   }
 
   function formatTime(
-  seconds: number,
-  separator: "," | "."
-) {
-  const hours = Math.floor(seconds / 3600);
+    seconds: number,
+    separator: "," | "."
+  ) {
+    const hours = Math.floor(seconds / 3600);
 
-  const minutes = Math.floor((seconds % 3600) / 60);
+    const minutes = Math.floor((seconds % 3600) / 60);
 
-  const secs = Math.floor(seconds % 60);
+    const secs = Math.floor(seconds % 60);
 
-  const milliseconds = Math.floor(
-    (seconds - Math.floor(seconds)) * 1000
-  );
+    const milliseconds = Math.floor(
+      (seconds - Math.floor(seconds)) * 1000
+    );
 
-  const hh = String(hours).padStart(2, "0");
+    const hh = String(hours).padStart(2, "0");
 
-  const mm = String(minutes).padStart(2, "0");
+    const mm = String(minutes).padStart(2, "0");
 
-  const ss = String(secs).padStart(2, "0");
+    const ss = String(secs).padStart(2, "0");
 
-  const ms = String(milliseconds).padStart(3, "0");
+    const ms = String(milliseconds).padStart(3, "0");
 
-  return `${hh}:${mm}:${ss}${separator}${ms}`;
-}
+    return `${hh}:${mm}:${ss}${separator}${ms}`;
+  }
 
   const wordCount = transcript
     ? transcript.trim().split(/\s+/).length
@@ -134,7 +143,7 @@ export default function TranscriptBox({
   );
 
   return (
-    <div className="mt-8">
+        <div className="mt-8">
       <div className="bg-slate-900 border border-slate-700 rounded-xl p-6">
 
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-5 mb-6">
@@ -163,32 +172,40 @@ export default function TranscriptBox({
 
           </div>
 
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap items-center gap-3">
 
             <button
               onClick={copyTranscript}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
+              disabled={!transcript}
+              aria-label="Copy transcript"
+              className="bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500"
             >
-              Copy
+              {copied ? "✓ Copied" : "Copy"}
             </button>
 
             <button
               onClick={downloadTXT}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+              disabled={!transcript}
+              aria-label="Download TXT"
+              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               TXT
             </button>
 
             <button
               onClick={downloadSRT}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg"
+              disabled={!segments.length}
+              aria-label="Download SRT"
+              className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             >
               SRT
             </button>
 
             <button
               onClick={downloadVTT}
-              className="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg"
+              disabled={!segments.length}
+              aria-label="Download VTT"
+              className="bg-violet-600 hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-violet-500"
             >
               VTT
             </button>
@@ -197,9 +214,11 @@ export default function TranscriptBox({
 
         </div>
 
-        <div className="bg-slate-950 rounded-lg p-5 min-h-[300px] whitespace-pre-wrap leading-8 text-slate-300">
+        <div className="bg-slate-950 rounded-lg p-5 min-h-[300px] max-h-[600px] overflow-y-auto scroll-smooth whitespace-pre-wrap leading-8 text-slate-300 select-text">
 
-          {transcript || "Your transcript will appear here..."}
+          {transcript
+            ? transcript
+            : "Paste a YouTube URL above and click Generate Transcript to view, copy, or download your transcript."}
 
         </div>
 
