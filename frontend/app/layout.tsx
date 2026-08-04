@@ -15,6 +15,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://yttubetranscript.com"),
 
+  verification: {
+    google: "vprGQe8hL3GnLFPzVPbq0yRglPF2EYFOV0rqi-dacAo",
+  },
+
   title: {
     default: "YT Tube Transcript - Free YouTube Transcript Generator",
     template: "%s | YT Tube Transcript",
