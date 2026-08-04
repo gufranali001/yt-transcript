@@ -13,6 +13,36 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://yttubetranscript.com/#organization",
+      name: "YT Tube Transcript",
+      url: "https://yttubetranscript.com",
+      logo: "https://yttubetranscript.com/favicon.ico",
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://yttubetranscript.com/#website",
+      url: "https://yttubetranscript.com",
+      name: "YT Tube Transcript",
+      description:
+        "Generate YouTube transcripts instantly. Download transcripts in TXT, SRT and VTT format.",
+      publisher: {
+        "@id": "https://yttubetranscript.com/#organization",
+      },
+      potentialAction: {
+        "@type": "SearchAction",
+        target:
+          "https://yttubetranscript.com/?q={search_term_string}",
+        "query-input": "required name=search_term_string",
+      },
+    },
+  ],
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://yttubetranscript.com"),
 
@@ -69,7 +99,7 @@ export const metadata: Metadata = {
         url: "https://yttubetranscript.com/og-image.png",
         width: 1200,
         height: 630,
-        alt: "YT Tube Transcript - Free YouTube Transcript Generator",
+        alt: "YT Tube Transcript",
       },
     ],
   },
@@ -79,7 +109,9 @@ export const metadata: Metadata = {
     title: "YT Tube Transcript - Free YouTube Transcript Generator",
     description:
       "Generate YouTube transcripts instantly. Download TXT, SRT and VTT files for free.",
-    images: ["https://yttubetranscript.com/og-image.png"],
+    images: [
+      "https://yttubetranscript.com/og-image.png",
+    ],
   },
 
   robots: {
@@ -112,7 +144,16 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
+
         {children}
+
       </body>
 
       {/* Google Analytics */}
@@ -126,10 +167,10 @@ export default function RootLayout({
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-
           gtag('config', 'G-7W1GVMV0Z1');
         `}
       </Script>
+
     </html>
   );
 }
