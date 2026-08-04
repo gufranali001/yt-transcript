@@ -5,6 +5,8 @@ export default function Header() {
     <header className="bg-[#050816] border-b border-slate-800">
       <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
 
+        {/* Logo */}
+
         <Link href="/" className="flex items-center gap-3">
 
           <div className="w-12 h-12 rounded-xl bg-red-600 flex items-center justify-center text-white text-2xl">
@@ -23,25 +25,49 @@ export default function Header() {
 
         </Link>
 
-        <nav className="hidden md:flex gap-8 text-slate-300">
+        {/* Navigation */}
 
-          <Link href="/" className="hover:text-red-500 transition">
+        <nav className="hidden md:flex items-center gap-8 text-slate-300">
+
+          <Link
+            href="/"
+            className="hover:text-red-500 transition-colors"
+          >
             Home
           </Link>
 
-          <Link href="/#languages" className="hover:text-red-500 transition">
+          <Link
+            href="/#languages"
+            className="hover:text-red-500 transition-colors"
+          >
             Languages
           </Link>
 
-          <Link href="/#blog" className="hover:text-red-500 transition">
+          <Link
+            href="/#blog"
+            className="hover:text-red-500 transition-colors"
+          >
             Blog
           </Link>
 
-          <Link href="/#faq" className="hover:text-red-500 transition">
+          <Link
+            href="/#faq"
+            className="hover:text-red-500 transition-colors"
+          >
             FAQ
           </Link>
 
-          <Link href="/contact" className="hover:text-red-500 transition">
+          <Link
+            href="/about"
+            className="hover:text-red-500 transition-colors"
+          >
+            About
+          </Link>
+
+          <Link
+            href="/contact"
+            className="hover:text-red-500 transition-colors"
+          >
             Contact
           </Link>
 

@@ -33,23 +33,30 @@ export default function Footer() {
 
             <Link
               href="/"
-              className="text-slate-400 hover:text-red-500"
+              className="text-slate-400 hover:text-red-500 transition-colors"
             >
               Home
             </Link>
 
             <Link
-              href="/#faq"
-              className="text-slate-400 hover:text-red-500"
+              href="/about"
+              className="text-slate-400 hover:text-red-500 transition-colors"
             >
-              FAQ
+              About Us
             </Link>
 
             <Link
               href="/contact"
-              className="text-slate-400 hover:text-red-500"
+              className="text-slate-400 hover:text-red-500 transition-colors"
             >
               Contact
+            </Link>
+
+            <Link
+              href="/#faq"
+              className="text-slate-400 hover:text-red-500 transition-colors"
+            >
+              FAQ
             </Link>
 
           </div>
@@ -68,16 +75,23 @@ export default function Footer() {
 
             <Link
               href="/privacy-policy"
-              className="text-slate-400 hover:text-red-500"
+              className="text-slate-400 hover:text-red-500 transition-colors"
             >
               Privacy Policy
             </Link>
 
             <Link
               href="/terms-and-conditions"
-              className="text-slate-400 hover:text-red-500"
+              className="text-slate-400 hover:text-red-500 transition-colors"
             >
               Terms & Conditions
+            </Link>
+
+            <Link
+              href="/disclaimer"
+              className="text-slate-400 hover:text-red-500 transition-colors"
+            >
+              Disclaimer
             </Link>
 
           </div>
@@ -88,15 +102,18 @@ export default function Footer() {
 
       <div className="border-t border-slate-800 py-6">
 
-        <div className="max-w-7xl mx-auto px-5 flex flex-col md:flex-row justify-between items-center">
+        <div className="max-w-7xl mx-auto px-5 flex flex-col md:flex-row justify-between items-center gap-3">
 
           <p className="text-slate-500 text-sm">
             © 2026 YT Tube Transcript. All Rights Reserved.
           </p>
 
-          <p className="text-slate-500 text-sm mt-3 md:mt-0">
+          <a
+            href="mailto:support.yttubetranscript@gmail.com"
+            className="text-slate-500 hover:text-red-500 transition-colors text-sm"
+          >
             support.yttubetranscript@gmail.com
-          </p>
+          </a>
 
         </div>
 
