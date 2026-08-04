@@ -58,27 +58,47 @@ export const metadata: Metadata = {
   openGraph: {
     title: "YT Tube Transcript - Free YouTube Transcript Generator",
     description:
-      "Generate YouTube transcripts instantly. Download TXT, SRT and VTT files free.",
+      "Generate YouTube transcripts instantly. Download TXT, SRT and VTT files for free.",
     url: "https://yttubetranscript.com",
     siteName: "YT Tube Transcript",
     locale: "en_US",
     type: "website",
+
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "YT Tube Transcript",
+      },
+    ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "YT Tube Transcript",
+    title: "YT Tube Transcript - Free YouTube Transcript Generator",
     description:
-      "Generate YouTube transcripts instantly for free.",
+      "Generate YouTube transcripts instantly. Download TXT, SRT and VTT files for free.",
+
+    images: ["/og-image.png"],
   },
 
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 
   icons: {
     icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
   },
 };
 
@@ -96,6 +116,7 @@ export default function RootLayout({
         {children}
       </body>
 
+      {/* Google Analytics */}
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-7W1GVMV0Z1"
         strategy="afterInteractive"
