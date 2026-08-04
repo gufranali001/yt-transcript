@@ -1,9 +1,11 @@
+import Link from "next/link";
+
 export default function Header() {
   return (
     <header className="bg-[#050816] border-b border-slate-800">
       <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
 
-        <div className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3">
 
           <div className="w-12 h-12 rounded-xl bg-red-600 flex items-center justify-center text-white text-2xl">
             ▶
@@ -19,17 +21,29 @@ export default function Header() {
             </p>
           </div>
 
-        </div>
+        </Link>
 
         <nav className="hidden md:flex gap-8 text-slate-300">
 
-          <a href="#">Home</a>
+          <Link href="/" className="hover:text-red-500 transition">
+            Home
+          </Link>
 
-          <a href="#">Languages</a>
+          <Link href="/#languages" className="hover:text-red-500 transition">
+            Languages
+          </Link>
 
-          <a href="#">Blog</a>
+          <Link href="/#blog" className="hover:text-red-500 transition">
+            Blog
+          </Link>
 
-          <a href="#">FAQ</a>
+          <Link href="/#faq" className="hover:text-red-500 transition">
+            FAQ
+          </Link>
+
+          <Link href="/contact" className="hover:text-red-500 transition">
+            Contact
+          </Link>
 
         </nav>
 
