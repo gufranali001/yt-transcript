@@ -1,6 +1,52 @@
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Contact Us",
-  description: "Contact YT Tube Transcript for support, feedback, or business inquiries.",
+
+  description:
+    "Contact YT Tube Transcript for support, feedback, partnership, or business inquiries. We usually respond within 24–48 hours.",
+
+  keywords: [
+    "Contact YT Tube Transcript",
+    "YouTube Transcript Support",
+    "Transcript Generator Contact",
+    "Customer Support",
+    "Business Inquiry",
+  ],
+
+  alternates: {
+    canonical: "https://yttubetranscript.com/contact",
+  },
+
+  openGraph: {
+    title: "Contact Us | YT Tube Transcript",
+    description:
+      "Need help? Contact the YT Tube Transcript team for support, feedback, or business inquiries.",
+    url: "https://yttubetranscript.com/contact",
+    siteName: "YT Tube Transcript",
+    type: "website",
+    images: [
+      {
+        url: "https://yttubetranscript.com/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "YT Tube Transcript",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact Us | YT Tube Transcript",
+    description:
+      "Contact YT Tube Transcript for support and business inquiries.",
+    images: ["https://yttubetranscript.com/og-image.png"],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function ContactPage() {
@@ -12,7 +58,8 @@ export default function ContactPage() {
 
       <p className="text-gray-300 mb-8">
         We'd love to hear from you. If you have any questions,
-        suggestions, or business inquiries, feel free to contact us.
+        suggestions, partnership requests, or business inquiries,
+        feel free to contact us.
       </p>
 
       <div className="bg-slate-900 border border-slate-700 rounded-xl p-8">
