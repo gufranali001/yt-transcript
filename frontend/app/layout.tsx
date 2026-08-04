@@ -52,24 +52,24 @@ export const metadata: Metadata = {
   publisher: "YT Tube Transcript",
 
   alternates: {
-    canonical: "https://yttubetranscript.com",
+    canonical: "https://yttubetranscript.com/",
   },
 
   openGraph: {
     title: "YT Tube Transcript - Free YouTube Transcript Generator",
     description:
       "Generate YouTube transcripts instantly. Download TXT, SRT and VTT files for free.",
-    url: "https://yttubetranscript.com",
+    url: "https://yttubetranscript.com/",
     siteName: "YT Tube Transcript",
     locale: "en_US",
     type: "website",
 
     images: [
       {
-        url: "/og-image.png",
+        url: "https://yttubetranscript.com/og-image.png",
         width: 1200,
         height: 630,
-        alt: "YT Tube Transcript",
+        alt: "YT Tube Transcript - Free YouTube Transcript Generator",
       },
     ],
   },
@@ -79,8 +79,7 @@ export const metadata: Metadata = {
     title: "YT Tube Transcript - Free YouTube Transcript Generator",
     description:
       "Generate YouTube transcripts instantly. Download TXT, SRT and VTT files for free.",
-
-    images: ["/og-image.png"],
+    images: ["https://yttubetranscript.com/og-image.png"],
   },
 
   robots: {
