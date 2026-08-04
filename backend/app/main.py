@@ -28,16 +28,19 @@ def home():
 
 
 @app.get("/transcript")
-def transcript(video_id: str):
+def transcript(video_id: str, lang: str = "auto"):
 
     try:
         url = "https://youtube-transcript3.p.rapidapi.com/api/transcript-with-url"
 
         querystring = {
             "url": f"https://www.youtube.com/watch?v={video_id}",
-            "flat_text": "false",
-            "lang": "en"
+            "flat_text": "false"
         }
+
+        # User selected language
+        if lang != "auto":
+            querystring["lang"] = lang
 
         headers = {
             "x-rapidapi-key": RAPIDAPI_KEY,
@@ -74,11 +77,10 @@ def transcript(video_id: str):
         if not isinstance(segments, list):
             segments = []
 
-        # Clean HTML entities in every segment
+        # Clean HTML entities
         cleaned_segments = []
 
         for item in segments:
-
             cleaned_segments.append({
                 **item,
                 "text": html.unescape(
@@ -86,18 +88,21 @@ def transcript(video_id: str):
                 )
             })
 
-        # Plain transcript
         plain_text = " ".join(
             item["text"]
             for item in cleaned_segments
         )
 
-        # Detect language
+        # Detect language returned by API
         language = (
             data.get("language")
             or data.get("lang")
             or data.get("detected_language")
-            or "English"
+            or (
+                "Auto Detect"
+                if lang == "auto"
+                else lang.upper()
+            )
         )
 
         return {

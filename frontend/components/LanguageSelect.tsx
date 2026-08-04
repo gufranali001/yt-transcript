@@ -1,26 +1,29 @@
 "use client";
 
-import { useState } from "react";
+type Props = {
+  language: string;
+  setLanguage: (language: string) => void;
+};
 
 const languages = [
-  "Auto Detect",
-  "English",
-  "Hindi",
-  "Urdu",
-  "Arabic",
-  "Spanish",
-  "French",
-  "German",
-  "Japanese",
-  "Korean",
+  { label: "Auto Detect", value: "auto" },
+  { label: "English", value: "en" },
+  { label: "Hindi", value: "hi" },
+  { label: "Urdu", value: "ur" },
+  { label: "Arabic", value: "ar" },
+  { label: "Spanish", value: "es" },
+  { label: "French", value: "fr" },
+  { label: "German", value: "de" },
+  { label: "Japanese", value: "ja" },
+  { label: "Korean", value: "ko" },
 ];
 
-export default function LanguageSelect() {
-  const [language, setLanguage] = useState("Auto Detect");
-
+export default function LanguageSelect({
+  language,
+  setLanguage,
+}: Props) {
   return (
     <div className="flex items-center gap-4">
-
       <label className="text-white font-semibold">
         Transcript Language
       </label>
@@ -31,12 +34,14 @@ export default function LanguageSelect() {
         className="bg-slate-900 text-white border border-slate-700 rounded-lg px-4 py-3"
       >
         {languages.map((lang) => (
-          <option key={lang} value={lang}>
-            {lang}
+          <option
+            key={lang.value}
+            value={lang.value}
+          >
+            {lang.label}
           </option>
         ))}
       </select>
-
     </div>
   );
 }

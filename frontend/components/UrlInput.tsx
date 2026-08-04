@@ -10,12 +10,14 @@ type Segment = {
 };
 
 type UrlInputProps = {
+  selectedLanguage: string;
   setTranscript: (text: string) => void;
   setSegments: (segments: Segment[]) => void;
   setLanguage: (language: string) => void;
 };
 
 export default function UrlInput({
+  selectedLanguage,
   setTranscript,
   setSegments,
   setLanguage,
@@ -59,9 +61,12 @@ export default function UrlInput({
     setLoading(true);
 
     try {
-      const res = await fetch(
-        `https://yt-transcript-production-71d5.up.railway.app/transcript?video_id=${videoId}`
-      );
+      const apiUrl =
+        selectedLanguage === "auto"
+          ? `https://yt-transcript-production-71d5.up.railway.app/transcript?video_id=${videoId}`
+          : `https://yt-transcript-production-71d5.up.railway.app/transcript?video_id=${videoId}&lang=${selectedLanguage}`;
+
+      const res = await fetch(apiUrl);
 
       const data = await res.json();
 

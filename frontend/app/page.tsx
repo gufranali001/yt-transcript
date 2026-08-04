@@ -23,6 +23,9 @@ export default function Home() {
   const [segments, setSegments] = useState<Segment[]>([]);
   const [language, setLanguage] = useState("");
 
+  const [selectedLanguage, setSelectedLanguage] =
+    useState("auto");
+
   return (
     <>
       <Header />
@@ -31,14 +34,19 @@ export default function Home() {
         <Hero />
 
         <section className="max-w-7xl mx-auto px-5 py-10">
+
           <UrlInput
+            selectedLanguage={selectedLanguage}
             setTranscript={setTranscript}
             setSegments={setSegments}
             setLanguage={setLanguage}
           />
 
           <div className="mt-6">
-            <LanguageSelect />
+            <LanguageSelect
+              language={selectedLanguage}
+              setLanguage={setSelectedLanguage}
+            />
           </div>
 
           <div className="mt-8">
@@ -48,6 +56,7 @@ export default function Home() {
               language={language}
             />
           </div>
+
         </section>
 
         <Features />
