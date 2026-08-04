@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Script from "next/script";
 
 import Header from "../components/Header";
 import Hero from "../components/Hero";
@@ -26,8 +27,50 @@ export default function Home() {
   const [selectedLanguage, setSelectedLanguage] =
     useState("auto");
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        name: "YT Tube Transcript",
+        url: "https://yttubetranscript.com",
+        description:
+          "Free YouTube Transcript Generator supporting 100+ languages.",
+      },
+      {
+        "@type": "Organization",
+        name: "YT Tube Transcript",
+        url: "https://yttubetranscript.com",
+        logo: "https://yttubetranscript.com/favicon.ico",
+        email: "support.yttubetranscript@gmail.com",
+      },
+      {
+        "@type": "SoftwareApplication",
+        name: "YT Tube Transcript",
+        applicationCategory: "UtilityApplication",
+        operatingSystem: "Web",
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "USD",
+        },
+        description:
+          "Generate YouTube transcripts instantly. Download TXT, SRT and VTT files for free.",
+        url: "https://yttubetranscript.com",
+      },
+    ],
+  };
+
   return (
     <>
+      <Script
+        id="schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema),
+        }}
+      />
+
       <Header />
 
       <main>
